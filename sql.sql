@@ -14,9 +14,10 @@ create table post(
     mensagem varchar(300),
     file varchar(120),
     created_at timestamp default current_timestamp
-);
+);	
 
-drop table post, cadastro;
+drop table post;
 
 select * from post;
 select * from cadastro;	
+select * from post, cadastro;

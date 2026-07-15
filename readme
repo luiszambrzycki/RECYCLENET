@@ -1,0 +1,19 @@
+PARA INICIAR O SITE SEM NENHUM ERRO, SIGA AS ETAPAS: 
+
+1 - CONFIGURAR MYSQL NA PORTA 3305;
+
+2 - IMPORTAR O BANCO DE DADOS "db_recyclenet" DO ARQUIVO sql.sql
+
+3 - ABRIR TERMINAL NA PASTA "RECYCLENET" E INSTALAR AS DEPENDÊNCIAS: "npm install cors dotenv express multer mysql2 nodemon swagger-jsdoc swagger-ui-express";
+
+4 - VERIFICAR SE O ARQUIVO ".env" POSSUI AS SEGUINTES CONFIGURAÇÕES:
+
+    PORT=3005
+
+    DB_HOST=localhost
+    DB_PORT=3305
+    DB_USER=root
+    DB_PASSWORD=root
+    DB_DATABASE=db_recyclenet
+
+4 - INICIAR SERVIDOR "npm start"

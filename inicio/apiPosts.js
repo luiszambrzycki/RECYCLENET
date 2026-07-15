@@ -20,12 +20,12 @@ async function getPosts() {
                 " <h2>" + post.titulo + "</h2>" +
                 " <p>" + post.mensagem + "</p> " +
                 img +
-                " <p><strong>Postado por:</strong>" + post.userEmail + "</p>" + 
                 " </div> ";
         });
 
     } else {
         alert("Erro ao carregar os posts");
+        console.log(response1)
     }
 }
 

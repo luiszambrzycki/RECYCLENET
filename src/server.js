@@ -7,8 +7,8 @@ require('dotenv').config(); // Certifique-se de carregar variáveis de ambiente
 const app = require('./app');
  
 // Definir a porta, ou buscar do arquivo .env
-const port = process.env.PORT || 3008; // Aqui a porta é definida corretamente
- 
+const port = process.env.PORT; // Aqui a porta é definida corretamente
+
 // Configuração do Swagger
 const swaggerOptions = {
   swaggerDefinition: {

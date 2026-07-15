@@ -1,7 +1,7 @@
 // Redireciona para a página de login se o usuário não estiver logado
 document.addEventListener("DOMContentLoaded", function () {
     if (localStorage.getItem('isLoggedIn') !== 'true') {
-        window.location.href = "../login/index.html";
+        window.location.href = "../registro/login/index.html";
     }
 
     // Inicializa o contador no localStorage, se ainda não existir
