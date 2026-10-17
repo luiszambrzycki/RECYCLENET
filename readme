@@ -1,19 +1,207 @@
-PARA INICIAR O SITE SEM NENHUM ERRO, SIGA AS ETAPAS: 
+<div align="center">
 
-1 - CONFIGURAR MYSQL NA PORTA 3305;
+<img src="assets/logo.png" alt="Logo RecycleNet" width="140" />
 
-2 - IMPORTAR O BANCO DE DADOS "db_recyclenet" DO ARQUIVO sql.sql
+# ♻️ RecycleNet
 
-3 - ABRIR TERMINAL NA PASTA "RECYCLENET" E INSTALAR AS DEPENDÊNCIAS: "npm install cors dotenv express multer mysql2 nodemon swagger-jsdoc swagger-ui-express";
+**Plataforma web para divulgar os pontos e horários de coleta seletiva e domiciliar de São Leopoldo/RS e incentivar a reciclagem na comunidade.**
 
-4 - VERIFICAR SE O ARQUIVO ".env" POSSUI AS SEGUINTES CONFIGURAÇÕES:
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Leaflet](https://img.shields.io/badge/Leaflet-199900?style=for-the-badge&logo=leaflet&logoColor=white)
+![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)
 
-    PORT=3005
+</div>
 
-    DB_HOST=localhost
-    DB_PORT=3305
-    DB_USER=root
-    DB_PASSWORD=root
-    DB_DATABASE=db_recyclenet
+---
 
-4 - INICIAR SERVIDOR "npm start"
+## 📖 Sobre o projeto
+
+O **RecycleNet** nasceu da dificuldade de encontrar, em um só lugar, informações claras sobre **onde e quando** acontece a coleta de lixo reciclável e domiciliar na cidade. A aplicação reúne essas informações em **mapas interativos**, traz **dicas práticas de reciclagem** e tem um **mural da comunidade**, onde os usuários podem compartilhar o que estão reciclando, com texto e foto.
+
+É um projeto **full stack**, com API REST própria, banco de dados relacional e interface web, desenvolvido para praticar a construção de uma aplicação completa, do banco de dados à tela do usuário.
+
+## ✨ Funcionalidades
+
+- 🗺️ **Mapa de Coleta Seletiva**: pontos de coleta com dia da semana, horário e informações adicionais (13 pontos cadastrados).
+- 🗺️ **Mapa de Coleta Domiciliar**: bairros atendidos, frequência e horário (11 pontos cadastrados).
+- 🔐 **Cadastro e login de usuários**, com rotas protegidas no frontend.
+- 📝 **Mural da comunidade**: criação de posts com título, mensagem e **upload de imagem**.
+- 👤 **Página de perfil**: e-mail, data de criação da conta e contadores de uso do mapa e de posts.
+- 📚 **Página de documentação** com o resumo do plano municipal de coleta (Decreto nº 9.004/2018 de São Leopoldo).
+- 💡 **Guia de boas práticas de reciclagem** na página inicial.
+- 📄 **Documentação interativa da API** com Swagger (`/api-docs`).
+
+## 🛠️ Tecnologias utilizadas
+
+| Camada | Tecnologias |
+| --- | --- |
+| **Frontend** | HTML5, CSS3, JavaScript (ES6+), Fetch API, Leaflet + OpenStreetMap |
+| **Backend** | Node.js, Express, Multer (upload de arquivos), CORS, dotenv |
+| **Banco de dados** | MySQL (`mysql2`) |
+| **Documentação** | Swagger (`swagger-jsdoc` + `swagger-ui-express`) |
+| **Ferramentas** | Git, GitHub, Nodemon, VS Code |
+
+## 🏗️ Arquitetura e estrutura
+
+O backend segue uma organização em camadas (**rotas → controllers → banco**), e o frontend é composto por páginas estáticas que consomem a API.
+
+```
+RECYCLENET/
+├── src/
+│   ├── config/          # Conexão com o MySQL e configuração do Multer
+│   ├── controller/      # Regras de cada endpoint
+│   ├── routes/          # Definição das rotas + anotações Swagger
+│   ├── app.js           # Configuração do Express (CORS, JSON, rotas)
+│   └── server.js        # Inicialização do servidor e do Swagger
+├── inicio/              # Página inicial, mapas e mural de posts
+│   ├── mapaSel/         # Mapa da coleta seletiva (marcadores em JSON)
+│   └── mapaDom/         # Mapa da coleta domiciliar (marcadores em JSON)
+├── registro/            # Telas de cadastro e login
+├── perfil/              # Página de perfil do usuário
+├── documentacao/        # Página com o plano municipal de coleta
+├── assets/              # Logos e imagens
+└── sql.sql              # Script do banco de dados
+```
+
+## 🔌 Endpoints da API
+
+Base URL local: `http://localhost:3005/api`
+
+| Método | Rota | Descrição |
+| --- | --- | --- |
+| `POST` | `/store/login` | Cadastra um novo usuário (`email`, `senha`) |
+| `POST` | `/store/entrar` | Verifica as credenciais de login |
+| `POST` | `/store/post` | Cria um post com imagem (`multipart/form-data`: `titulo`, `mensagem`, `file`) |
+| `GET` | `/dados` | Lista todos os posts |
+
+A documentação interativa fica em **`http://localhost:3005/api-docs`**.
+
+## 🚀 Como executar
+
+### Pré-requisitos
+
+- [Node.js](https://nodejs.org/) 18 ou superior
+- [MySQL](https://www.mysql.com/) em execução
+
+### Passo a passo
+
+**1. Clone o repositório**
+
+```bash
+git clone https://github.com/luisotavio18/RECYCLENET.git
+cd RECYCLENET
+```
+
+**2. Instale as dependências**
+
+```bash
+npm install
+```
+
+**3. Crie o banco de dados**
+
+Execute o script abaixo no MySQL:
+
+```sql
+CREATE DATABASE db_recyclenet;
+USE db_recyclenet;
+
+CREATE TABLE cadastro (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  email VARCHAR(255),
+  senha VARCHAR(20),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE post (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  titulo VARCHAR(50),
+  mensagem VARCHAR(300),
+  file VARCHAR(120),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+**4. Configure as variáveis de ambiente**
+
+Crie um arquivo `.env` na raiz do projeto, seguindo o `.env.example`:
+
+```env
+PORT=3005
+
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=seu_usuario
+DB_PASSWORD=sua_senha
+DB_DATABASE=db_recyclenet
+```
+
+> Ajuste `DB_PORT` para a porta do seu MySQL (o padrão é `3306`).
+
+**5. Crie a pasta de uploads**
+
+```bash
+mkdir src/public
+```
+
+**6. Inicie o servidor**
+
+```bash
+npm start
+```
+
+O servidor sobe em `http://localhost:3005`.
+
+**7. Abra o frontend**
+
+Abra o arquivo `registro/cadastro/index.html` no navegador (de preferência com a extensão **Live Server** do VS Code), crie sua conta, faça login e você será levado à página inicial com os mapas.
+
+## 📸 Screenshots
+
+<!--
+Adicione aqui prints do projeto, por exemplo:
+
+![Página inicial](docs/home.png)
+![Mapa de coleta seletiva](docs/mapa.png)
+![Mural da comunidade](docs/mural.png)
+-->
+
+## 🔮 Próximos passos
+
+Pontos de evolução que já mapeei para o projeto:
+
+- [ ] Fazer **hash das senhas** com `bcrypt` e autenticação com **JWT**, no lugar do controle de login via `localStorage`
+- [ ] **Sanitizar o conteúdo dos posts** antes de renderizar, para prevenir XSS
+- [ ] Mover a URL da API para uma **variável de configuração**, em vez de `localhost` fixo
+- [ ] Tornar o layout **responsivo** (media queries) para celulares
+- [ ] **Deploy** do backend e do banco, com o frontend publicado online
+- [ ] Validação de dados de entrada no backend e tratamento de erros mais completo
+- [ ] Painel para **cadastrar novos pontos de coleta** sem editar os arquivos JSON
+
+## 🧠 O que aprendi
+
+- Estruturar uma **API REST** com Express, separando rotas e controllers
+- Modelar tabelas e fazer **consultas parametrizadas** em MySQL, evitando SQL Injection
+- Implementar **upload de arquivos** com Multer
+- Documentar endpoints com **Swagger/OpenAPI**
+- Integrar frontend e backend com `fetch`, `async/await` e `FormData`
+- Trabalhar com **mapas interativos** usando Leaflet e dados em JSON
+- Organizar e versionar um projeto com **Git e GitHub**
+
+## 👨‍💻 Autor
+
+Desenvolvido por **[Seu Nome]**
+
+[![GitHub](https://img.shields.io/badge/GitHub-luisotavio18-181717?style=flat&logo=github)](https://github.com/luisotavio18)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Conecte--se-0A66C2?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/SEU-PERFIL/)
+
+---
+
+<div align="center">
+
+Feito com 💚 para tornar a reciclagem mais acessível.
+
+</div>
